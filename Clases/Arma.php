@@ -8,7 +8,7 @@ class Arma {
     private $nivelMinimo;
     private $estado; //El estado puede tomar los siguientes valores: disponible, equipada, rota
 
-    public function __construct($id, $nombre, $tipo, $danioBase, $nivelMinimo, $estado){
+    public function __construct($nombre, $tipo, $danioBase, $nivelMinimo, $estado, $id = null){
         $this->id = $id;
         $this->nombre = $nombre;
         $this->tipo = $tipo;

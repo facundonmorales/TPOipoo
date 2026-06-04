@@ -10,7 +10,7 @@ abstract class Personaje {
     private $duelosPerdidos;
     private $estado; // el estado puede tomar los siguientes valores: disponible, lesionado, retirado
 
-    public function __construct($id, $nombre, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado){
+    public function __construct($nombre, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $id = null){
         $this->id = $id;
         $this->nombre = $nombre;
         $this->nivel = $nivel;

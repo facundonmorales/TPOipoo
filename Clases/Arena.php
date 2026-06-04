@@ -7,7 +7,7 @@ class Arena {
     private $capacidadPublico;
     private $clima; //climas posibles: normal, lluvia, tormenta, niebla
 
-    public function __construct($id, $nombre, $dificultad, $capacidadPublico, $clima)
+    public function __construct($nombre, $dificultad, $capacidadPublico, $clima, $id = null)
     {
         $this->id = $id;
         $this->nombre = $nombre;

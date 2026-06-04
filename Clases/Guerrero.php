@@ -4,10 +4,10 @@ class Guerrero extends Personaje {
     private $fuerza;
     private $armadura;
 
-    public function __construct( $id, $nombre, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $fuerza, $armadura){
+    public function __construct($nombre, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $fuerza, $armadura, $id = null){
         $this->fuerza = $fuerza;
         $this->armadura = $armadura;
-        parent::__construct($id, $nombre, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado);
+        parent::__construct($nombre, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $id);
     }
 
     //Getters
