@@ -89,10 +89,19 @@ public function realizarDuelo($arma1, $arma2){
         $pwPersonaje2 = $personaje2 -> calcularPoderTotal() + $arma2 -> calcularDanio() + $this -> getArena() -> calcularModificadorArena();
         if($pwPersonaje1 > $pwPersonaje2){
             $this-> setGanador($personaje1);
-        } else {
+            $danio = $pwPersonaje1 - $pwPersonaje2;
+            $this -> getGanador() -> darPremio(); 
+            $this -> getPersonaje2() -> recibirCastigo($danio);
+        } else if ($pwPersonaje2 > $pwPersonaje1){
             $this -> setGanador($personaje2);
+            $danio = $pwPersonaje2 - $pwPersonaje1;
+            $this -> getGanador() -> darPremio(); 
+            $this -> getPersonaje1() -> recibirCastigo($danio);
         }
+        $this -> setEstado('realizado');
         $seRealizo = true;
+    } else {
+        $this -> setEstado('cancelado');
     }
     return $seRealizo;
 }
