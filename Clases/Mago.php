@@ -4,10 +4,10 @@ class Mago extends Personaje {
     private $mana;
     private $inteligencia;
 
-    public function __construct($nombre, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $mana, $inteligencia, $id = null){
+    public function __construct($nombre, $tipoPersonaje, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $mana, $inteligencia, $id = null){
         $this->mana = $mana;
         $this->inteligencia = $inteligencia;
-        parent::__construct($nombre, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $id);
+        parent::__construct($nombre, $tipoPersonaje, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $id);
     }
 
     //Getters

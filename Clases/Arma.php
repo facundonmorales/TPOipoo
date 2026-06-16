@@ -61,22 +61,29 @@ class Arma {
     //Metodos
 
     public function calcularDanio(){
-
+        if($this->getEstado() == 'rota'){
+            return 0;
+        }
+        return $this->getDañoBase();
     }
 
     public function puedeSerEquipadaPor(Personaje $personaje){
         $estadoArma = $this->getEstado();
         $nivelPersonaje = $personaje->getNivel();
-        if($estadoArma =='rota'){
-            return false;
+        $nivelMinimo = $this->getNivelMinimo();
+        $puedeSerEquipada = true;
+        switch($estadoArma){
+            case "rota":
+                $puedeSerEquipada = false;
+                break;
+            case ($estadoArma == "equipada" && $nivelPersonaje < $nivelMinimo):
+                $puedeSerEquipada = false;
+                break;
+            case "disponible":
+                $puedeSerEquipada = true;
+                break;
         }
-        if ($estadoArma == 'equipada') {
-            return false;
-        }
-        if($nivelPersonaje < 0){
-            return false;
-        }
-        return true;
+        return $puedeSerEquipada;
     }
 
 

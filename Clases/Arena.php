@@ -1,5 +1,7 @@
 <?php
-
+include 'Guerrero.php';
+include 'Mago.php';
+include 'Arquero.php';
 class Arena {
     private $id;
     private $nombre;
@@ -51,7 +53,49 @@ class Arena {
 
     //Metodos
     public function calcularModificadorArena(Personaje $personaje){
+        $tipo = $personaje->getTipoPersonaje();
+        $clima = $this->getClima();
+        $modificador = 0;
+        
+        switch ($clima) {
+            case "lluvia":
+                switch ($tipo){
+                    case "arquero":
+                        $modificador = -10;
+                    case "guerrero":
+                        $modificador = 0;
+                    case "mago":
+                        $modificador = 5;
+                }
+                break;
+            case "tormenta":
+                switch ($tipo){
+                    case "arquero":
+                        $modificador = -5;
+                    case "guerrero":
+                        $modificador = -5;
+                    case "mago":
+                        $modificador = 15;
+                }
+                break;
+            case "niebla":
+                switch ($tipo){
+                    case "arquero":
+                        $modificador = -15;
+                    case "guerrero":
+                        $modificador = 5;
+                    case "mago":
+                        $modificador = 0;
+                }
+                break;
+            case "normal":
+                $modificador = 0;
+                break;
+        }
 
+        return $modificador;
     }
     
 }
+
+

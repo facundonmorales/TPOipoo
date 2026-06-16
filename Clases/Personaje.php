@@ -3,6 +3,7 @@
 abstract class Personaje {
     private $id;
     private $nombre;
+    private $tipoPersonaje;
     private $nivel;
     private $puntosVida;
     private $energia;
@@ -10,9 +11,10 @@ abstract class Personaje {
     private $duelosPerdidos;
     private $estado; // el estado puede tomar los siguientes valores: disponible, lesionado, retirado
 
-    public function __construct($nombre, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $id = null){
+    public function __construct($nombre, $tipoPersonaje, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $id = null){
         $this->id = $id;
         $this->nombre = $nombre;
+        $this->tipoPersonaje = $tipoPersonaje;
         $this->nivel = $nivel;
         $this->puntosVida = $puntosVida;
         $this->energia = $energia;
@@ -27,6 +29,9 @@ abstract class Personaje {
     }
     public function getNombre(){
         return $this->nombre;
+    }
+    public function getTipoPersonaje(){
+        return $this->tipoPersonaje;
     }
     public function getNivel(){
         return $this->nivel;
@@ -53,6 +58,9 @@ abstract class Personaje {
     }
     public function setNombre($nombre){
         $this->nombre = $nombre;
+    }
+    public function setTipoPersonaje($tipoPersonaje){
+        $this->tipoPersonaje = $tipoPersonaje;
     }
     public function setNivel($nivel){
         $this->nivel = $nivel;
@@ -105,6 +113,7 @@ abstract class Personaje {
     {
         $mensaje = "Id: {$this->getId()}\n".
                    "Nombre: {$this->getNombre()}\n".
+                   "Clase: {$this->getTipoPersonaje()}\n".
                    "Nivel: {$this->getNivel()}\n".
                    "Puntos de vida: {$this->getPuntosVida()}\n".
                    "Energia: {$this->getEnergia()}\n".
