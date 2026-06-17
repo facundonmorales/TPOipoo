@@ -68,12 +68,10 @@ public function setId($id){
 }
 
 public function puedeRealizarse(){
-    $estadoPj1 = $this->getPersonaje1()->getEstado();
-    $estadoPj2 = $this->getPersonaje2()->getEstado();
     $idPj1 = $this->getPersonaje1()->getId();
     $idPj2 = $this->getPersonaje2()->getId();
     $sePuedeRealizar = false;
-    if($idPj1 != $idPj2 && ($estadoPj1 != 'lesionado' && $estadoPj2 != 'lesionado') && ($estadoPj1 != 'retirado' && $estadoPj2 != 'retirado')){
+    if($idPj1 != $idPj2 && $this->getPersonaje1()-> puedeDuelar() && $this-> getPersonaje2()-> puedeDuelar()){
         $sePuedeRealizar = true;
     }
     return $sePuedeRealizar;
@@ -90,12 +88,12 @@ public function realizarDuelo($arma1, $arma2){
         if($pwPersonaje1 > $pwPersonaje2){
             $this-> setGanador($personaje1);
             $danio = $pwPersonaje1 - $pwPersonaje2;
-            $this -> getGanador() -> darPremio(); 
+            $this -> getGanador() -> recibirRecompensas(); 
             $this -> getPersonaje2() -> recibirCastigo($danio);
         } else if ($pwPersonaje2 > $pwPersonaje1){
             $this -> setGanador($personaje2);
             $danio = $pwPersonaje2 - $pwPersonaje1;
-            $this -> getGanador() -> darPremio(); 
+            $this -> getGanador() -> recibirRecompensas(); 
             $this -> getPersonaje1() -> recibirCastigo($danio);
         }
         $this -> setEstado('realizado');

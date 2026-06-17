@@ -71,17 +71,19 @@ class Arma {
         $estadoArma = $this->getEstado();
         $nivelPersonaje = $personaje->getNivel();
         $nivelMinimo = $this->getNivelMinimo();
-        $puedeSerEquipada = true;
+        $puedeSerEquipada = false;
+        if($nivelPersonaje >= $nivelMinimo){
         switch($estadoArma){
             case "rota":
                 $puedeSerEquipada = false;
                 break;
-            case ($estadoArma == "equipada" && $nivelPersonaje < $nivelMinimo):
+            case "equipada":
                 $puedeSerEquipada = false;
                 break;
             case "disponible":
                 $puedeSerEquipada = true;
                 break;
+        }
         }
         return $puedeSerEquipada;
     }

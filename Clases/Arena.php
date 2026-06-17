@@ -62,30 +62,39 @@ class Arena {
                 switch ($tipo){
                     case "arquero":
                         $modificador = -10;
+                        break;
                     case "guerrero":
                         $modificador = 0;
+                        break;
                     case "mago":
                         $modificador = 5;
+                        break;
                 }
                 break;
             case "tormenta":
                 switch ($tipo){
                     case "arquero":
                         $modificador = -5;
+                        break;
                     case "guerrero":
                         $modificador = -5;
+                        break;
                     case "mago":
                         $modificador = 15;
+                        break;
                 }
                 break;
             case "niebla":
                 switch ($tipo){
                     case "arquero":
                         $modificador = -15;
+                        break;
                     case "guerrero":
                         $modificador = 5;
+                        break;
                     case "mago":
                         $modificador = 0;
+                        break;
                 }
                 break;
             case "normal":

@@ -96,13 +96,29 @@ abstract class Personaje {
         $this->setEnergia($energiaRecuperada);
     }
     public function puedeDuelar(){
-
+        return $this->getEstado() == 'disponible';
     }
     public function calcularPoderTotal(){
         $poderBase = $this->calcularPoderBase();
         $poderEspecial = $this->calcularPoderEspecial();
         $poderTotal = $poderBase + $poderEspecial;
         return $poderTotal;
+    }
+    public function recibirRecompensas(){
+        $this -> setNivel($this-> getNivel() + 1);
+        $this -> setEnergia($this-> getEnergia() + 5);
+        $this -> setDuelosGanados($this-> getDuelosGanados() + 1);
+    }
+
+    public function recibirCastigo($danio){
+        $this-> recibirDanio($danio);
+        $this-> setDuelosPerdidos($this -> getDuelosPerdidos() + 1);
+        $this -> setEnergia($this-> getEnergia() - 5);
+        if($this -> getPuntosVida() <= 0){
+            $this-> setEstado('retirado');
+        } else if ($this -> getPuntosVida() < 30){
+            $this-> setEstado('lesionado');
+        }
     }
 
     //Metodo abstractos
