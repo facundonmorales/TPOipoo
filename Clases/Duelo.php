@@ -230,29 +230,33 @@ class Duelo
             if ($this->getPwPersonaje1() > $this->getPwPersonaje2()) {
                 $this->setGanador($personaje1);
                 $this->setDanioAplicado($this->getPwPersonaje1() - $this->getPwPersonaje2());
-
                 $this->getGanador()->recibirRecompensas();
                 $this->getPersonaje2()->recibirCastigo($this->getDanioAplicado());
-                
-            } else if ($this->getPwPersonaje2() > $this->getPwPersonaje1()) {
+
+            } elseif ($this->getPwPersonaje2() > $this->getPwPersonaje1()) {
                 $this->setGanador($personaje2);
                 $this->setDanioAplicado($this->getPwPersonaje2() - $this->getPwPersonaje1());
                 $this->getGanador()->recibirRecompensas();
                 $this->getPersonaje1()->recibirCastigo($this->getDanioAplicado());
+
+            } else {
+                // Empate: nadie gana ni pierde, daño 0
+                $this->setGanador(null);
+                $this->setDanioAplicado(0);
             }
 
             $this->setEstado('realizado');
             $seRealizo = true;
             $personaje1->guardar($database);
             $personaje2->guardar($database);
-            
+
         } else {
             $this->setEstado('cancelado');
             $this->setPwPersonaje1(null);
             $this->setPwPersonaje2(null);
             $this->setDanioAplicado(null);
         }
-        $this->guardar($database); 
+        $this->guardar($database);
 
         return $seRealizo;
     }

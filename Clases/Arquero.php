@@ -27,8 +27,9 @@ class Arquero extends Personaje {
         $this->velocidad = $velocidad;
     }
     public function calcularPoderBase(){
-        $nivel = $this->getNivel();
-        $poderBase = $nivel * 15;
+        $nivel     = $this->getNivel();
+        $precision = $this->getPrecision();
+        $poderBase = $nivel * 12 + $precision;
         return $poderBase;
     }
     public function calcularPoderEspecial(){
@@ -38,7 +39,7 @@ class Arquero extends Personaje {
         return $poderEspecial;
     }
 
-    public function toString(){
+    public function __toString(){
         return parent::__toString().
                "Precision: {$this->getPrecision()}\n".
                "Velocidad: {$this->getVelocidad()}\n";

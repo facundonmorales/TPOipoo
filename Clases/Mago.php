@@ -37,7 +37,7 @@ class Mago extends Personaje {
         return $poderEspecial;
     }
 
-    public function toString(){
+    public function __toString(){
         return parent::__toString().
                "Mana: {$this->getMana()}\n".
                "Inteligencia: {$this->getInteligencia()}\n";

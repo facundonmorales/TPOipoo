@@ -1,5 +1,12 @@
 <?php
-include_once "configuracion.php";
+include_once "Personaje.php";
+include_once "Guerrero.php";
+include_once "Mago.php";
+include_once "Arquero.php";
+include_once "Arma.php";
+include_once "Arena.php";
+include_once "Duelo.php";
+
 class Torneo {
     private $database;
     private $personajes;
@@ -49,33 +56,31 @@ class Torneo {
     public function setDuelos($duelos) {
         $this->duelos = $duelos;
     }
+
     public function agregarPersonaje($personaje) {
         $personaje->guardar($this->database);
         $coleccionActual = $this->getPersonajes();
-        $coleccionActual[] = $personaje; 
-        
-        $this->setPersonajes($coleccionActual); 
+        $coleccionActual[] = $personaje;
+        $this->setPersonajes($coleccionActual);
     }
 
     public function agregarArma($arma) {
         $arma->guardar($this->database);
         $coleccionActual = $this->getArmas();
         $coleccionActual[] = $arma;
-        
         $this->setArmas($coleccionActual);
     }
-
 
     public function agregarArena($arena) {
         $arena->guardar($this->database);
         $coleccionActual = $this->getArenas();
         $coleccionActual[] = $arena;
-        
         $this->setArenas($coleccionActual);
     }
+
     public function equiparArma($personaje, $arma) {
         $sePudoEquipar = false;
-         if ($arma->puedeSerEquipadaPor($personaje)) {
+        if ($arma->puedeSerEquipadaPor($personaje)) {
             if ($personaje->getArmaEquipada() !== null) {
                 $armaVieja = $personaje->getArmaEquipada();
                 $armaVieja->setEstado('disponible');
@@ -85,10 +90,8 @@ class Torneo {
             $arma->setEstado('equipada');
             $personaje->guardar($this->getDatabase());
             $arma->guardar($this->getDatabase());
-
             $sePudoEquipar = true;
         }
-
         return $sePudoEquipar;
     }
 
@@ -99,36 +102,50 @@ class Torneo {
             $personaje2,
             $arena,
             $fechaActual,
-            'pendiente' 
+            'pendiente'
         );
-
         $duelo->guardar($this->getDatabase());
         $coleccionActual = $this->getDuelos();
         $coleccionActual[] = $duelo;
         $this->setDuelos($coleccionActual);
-
         return $duelo;
     }
 
-    public function listarPersonajes($estado = null) {
-        $condiciones = [];
-        if ($estado !== null) {
-            $condiciones = ["estado" => $estado];
-        }
-        $personajesDesdeBD = Personaje::listar($this->getDatabase(), $condiciones);
-        if ($estado === null) {
-            $this->setPersonajes($personajesDesdeBD);
-        }
+    public function realizarDuelo($duelo) {
+        return $duelo->realizarDuelo($this->getDatabase());
+    }
 
-        return $personajesDesdeBD;
-    }           
+    public function listarPersonajes($estado = null) {
+        $todos = Personaje::listar($this->getDatabase());
+        if ($estado !== null) {
+            $filtrados = array_values(array_filter($todos, fn($p) => $p->getEstado() === $estado));
+            return $filtrados;
+        }
+        $this->setPersonajes($todos);
+        return $todos;
+    }
 
     public function listarArmas() {
         $armasDesdeBD = Arma::listar($this->getDatabase());
         $this->setArmas($armasDesdeBD);
-
         return $armasDesdeBD;
     }
-    public function listarDuelos(){}
-    public function rankingPersonajes(){}
+
+    public function listarArenas() {
+        $arenasDesdeBD = Arena::listar($this->getDatabase());
+        $this->setArenas($arenasDesdeBD);
+        return $arenasDesdeBD;
+    }
+
+    public function listarDuelos() {
+        $duelosDesdeBD = Duelo::listar($this->getDatabase());
+        $this->setDuelos($duelosDesdeBD);
+        return $duelosDesdeBD;
+    }
+
+    public function rankingPersonajes() {
+        $personajes = Personaje::listar($this->getDatabase());
+        usort($personajes, fn($a, $b) => $b->getDuelosGanados() - $a->getDuelosGanados());
+        return $personajes;
+    }
 }

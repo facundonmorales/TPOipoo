@@ -1,5 +1,5 @@
 <?php 
-require_once("./Librerias/Medoo.php");
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Medoo\Medoo;
 

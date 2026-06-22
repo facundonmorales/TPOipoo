@@ -280,14 +280,9 @@ abstract class Personaje {
     }
 
     public function recibirCastigo($danio){
-        $this-> recibirDanio($danio);
-        $this-> setDuelosPerdidos($this -> getDuelosPerdidos() + 1);
-        $this -> setEnergia($this-> getEnergia() - 5);
-        if($this -> getPuntosVida() <= 0){
-            $this-> setEstado('retirado');
-        } else if ($this -> getPuntosVida() < 30){
-            $this-> setEstado('lesionado');
-        }
+        $this->recibirDanio($danio); // recibirDanio ya actualiza el estado correctamente
+        $this->setDuelosPerdidos($this->getDuelosPerdidos() + 1);
+        $this->setEnergia($this->getEnergia() - 5);
     }
 
     //Metodo abstractos

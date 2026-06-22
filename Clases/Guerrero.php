@@ -37,10 +37,9 @@ class Guerrero extends Personaje {
         return $poderEspecial;
     }
 
-    public function toString(){
+    public function __toString(){
         return parent::__toString().
                "Fuerza: {$this->getFuerza()}\n".
                "Armadura: {$this->getArmadura()}\n";
-
     }
 }
