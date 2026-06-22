@@ -10,8 +10,9 @@ abstract class Personaje {
     private $duelosGanados;
     private $duelosPerdidos;
     private $estado; // el estado puede tomar los siguientes valores: disponible, lesionado, retirado
+    private ?Arma $armaEquipada = null;
 
-    public function __construct($nombre, $tipoPersonaje, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $id = null){
+    public function __construct($nombre, $tipoPersonaje, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $id = null,){
         $this->id = $id;
         $this->nombre = $nombre;
         $this->tipoPersonaje = $tipoPersonaje;
@@ -51,6 +52,9 @@ abstract class Personaje {
     public function getEstado(){
         return $this->estado;
     }
+    public function getArmaEquipada(){
+         return $this->armaEquipada; 
+    }
 
     //Setters
     public function setId($id){
@@ -80,12 +84,20 @@ abstract class Personaje {
     public function setEstado($estado){
         $this->estado = $estado;
     }
+    public function setArmaEquipada(?Arma $armaEquipada){
+        $this->armaEquipada = $armaEquipada;
+    }
 
 
     //Métodos
-    public function recibirDanio($cantidad){
-        $vidaRestante = $this->getPuntosVida() - $cantidad;
-        $this->setPuntosVida($vidaRestante);
+    public function recibirDanio( $cantidad) {
+        $this->puntosVida -= $cantidad;
+        if ($this->puntosVida <= 0) {
+            $this->puntosVida = 0;
+            $this->estado = 'retirado';
+        } elseif ($this->puntosVida <= 30) {
+            $this->estado = 'lesionado';
+        }
     }
     public function recuperarVida($cantidad){
         $vidaRecuperada = $this->getPuntosVida() + $cantidad;
