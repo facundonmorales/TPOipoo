@@ -3,12 +3,13 @@
 class Arquero extends Personaje {
     private $precision;
     private $velocidad;
-
-    public function __construct($nombre, $tipoPersonaje, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $precision, $velocidad, $id = null ){
+    public function __construct($nombre, $tipoPersonaje, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $precision, $velocidad, $id = null, $idArmaEquipada = null){
+        parent::__construct($nombre, $tipoPersonaje, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $id, $idArmaEquipada);
+        
         $this->precision = $precision;
         $this->velocidad = $velocidad;
-        parent::__construct($nombre, $tipoPersonaje, $nivel, $puntosVida, $energia, $duelosGanados, $duelosPerdidos, $estado, $id);
     }
+
 
     //Getters
     public function getPrecision(){

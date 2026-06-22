@@ -27,7 +27,7 @@ class Arma {
     public function getTipo(){
         return $this->tipo;
     }
-    public function getDañoBase(){
+    public function getDanioBase(){
         return $this->danioBase;
     }
     public function getNivelMinimo(){
@@ -48,7 +48,7 @@ class Arma {
     public function setTipo($tipo){
         $this->tipo = $tipo;
     }
-    public function setDañoBase($danioBase){
+    public function setDanioBase($danioBase){
         $this->danioBase = $danioBase;
     }
     public function setNivelMinimo($nivelMinimo){
@@ -58,13 +58,80 @@ class Arma {
         $this->estado = $estado;
     }
 
+    //Consultas SQL
+
+    public function guardar($database) {
+        // 1. Mapeamos las propiedades del objeto a las columnas de la tabla 'armas'
+        $datos = [
+            "nombre" => $this->getNombre(),
+            "tipo" => $this->getTipo(),
+            "danioBase" => $this->getDanioBase(),
+            "nivelMinimo" => $this->getNivelMinimo(),
+            "estado" => $this->getEstado()
+        ];
+        if ($this->getId()) {
+            $database->update("armas", $datos, ["id" => $this->getId()]);
+        } else {
+            $database->insert("armas", $datos);
+            $this->setId($database->id());
+        }
+    }
+
+    public function borrar($database) {
+
+        if ($this->getId()) {
+            $resultado = $database->delete("armas", [
+                "id" => $this->getId()
+            ]);
+
+            if ($resultado) {
+                $this->setId(null); 
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static function buscarPorId($database, $id) {
+        $datos = $database->get("armas", "*", ["id" => $id]);
+        $objetoArma = null; 
+        if ($datos) {
+            $objetoArma = new Arma(
+                $datos["nombre"],
+                $datos["tipo"],
+                $datos["danioBase"],
+                $datos["nivelMinimo"],
+                $datos["estado"],
+                $datos["id"] 
+            );
+        }
+
+        return $objetoArma;
+    }
+
+    public static function listar($database) {
+        $todasLasArmas = $database->select("armas", "*");
+        $listaArmas = []; 
+        foreach ($todasLasArmas as $datos) {
+            $listaArmas[] = new Arma(
+                $datos["nombre"],
+                $datos["tipo"],
+                $datos["danioBase"],
+                $datos["nivelMinimo"],
+                $datos["estado"],
+                $datos["id"] 
+            );
+        }
+        return $listaArmas;
+    }
+
     //Metodos
 
     public function calcularDanio(){
         if($this->getEstado() == 'rota'){
             return 0;
         }
-        return $this->getDañoBase();
+        return $this->getDanioBase();
     }
 
     public function puedeSerEquipadaPor(Personaje $personaje){

@@ -51,6 +51,69 @@ class Arena {
         $this->clima = $clima;
     }
 
+    //Consultas SQL
+    public function guardar($database) {
+        $datos = [
+            "nombre" => $this->getNombre(),
+            "dificultad" => $this->getDificultad(),
+            "capacidadPublico" => $this->getCapacidadPublico(),
+            "clima" => $this->getClima()
+        ];
+
+        if ($this->getId()) {
+            $database->update("arenas", $datos, ["id" => $this->getId()]);
+        } else {
+            $database->insert("arenas", $datos);
+            $this->setId($database->id());
+        }
+    }
+    public static function buscarPorId($database, $id) {
+        $datos = $database->get("arenas", "*", ["id" => $id]);
+        $objetoArena = null; 
+
+        if ($datos) {
+            $objetoArena = new Arena(
+                $datos["nombre"],
+                $datos["dificultad"],
+                $datos["capacidadPublico"],
+                $datos["clima"],
+                $datos["id"]
+            );
+        }
+
+        return $objetoArena;
+    }
+
+    public static function listar($database) {
+        $todasLasArenas = $database->select("arenas", "*");
+        $listaArenas = []; 
+
+        foreach ($todasLasArenas as $datos) {
+            $listaArenas[] = new Arena(
+                $datos["nombre"],
+                $datos["dificultad"],
+                $datos["capacidadPublico"],
+                $datos["clima"],
+                $datos["id"]
+            );
+        }
+
+        return $listaArenas;
+    }
+
+    public function borrar($database) {
+        if ($this->getId()) {
+            $resultado = $database->delete("arenas", [
+                "id" => $this->getId()
+            ]);
+            if ($resultado) {
+                $this->setId(null); 
+                return true;
+            }
+        }
+        return false;
+    }
+
     //Metodos
     public function calcularModificadorArena(Personaje $personaje){
         $tipo = $personaje->getTipoPersonaje();
