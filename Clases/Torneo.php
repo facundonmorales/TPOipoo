@@ -59,25 +59,25 @@ class Torneo {
 
     public function agregarPersonaje($personaje) {
         $personaje->guardar($this->database);
-        $coleccionActual = $this->getPersonajes();
-        $coleccionActual[] = $personaje;
-        $this->setPersonajes($coleccionActual);
+        $arrayPersonaje = $this->getPersonajes();
+        $arrayPersonaje[] = $personaje;
+        $this->setPersonajes($arrayPersonaje);
     }
 
     public function agregarArma($arma) {
         $arma->guardar($this->database);
-        $coleccionActual = $this->getArmas();
-        $coleccionActual[] = $arma;
-        $this->setArmas($coleccionActual);
+        $arrayArma = $this->getArmas();
+        $arrayArma[] = $arma;
+        $this->setArmas($arrayArma);
     }
 
     public function agregarArena($arena) {
         $arena->guardar($this->database);
-        $coleccionActual = $this->getArenas();
-        $coleccionActual[] = $arena;
-        $this->setArenas($coleccionActual);
+        $arrayArena = $this->getArenas();
+        $arrayArena[] = $arena;
+        $this->setArenas($arrayArena);
     }
-
+    
     public function equiparArma($personaje, $arma) {
         $sePudoEquipar = false;
         if ($arma->puedeSerEquipadaPor($personaje)) {
@@ -96,7 +96,8 @@ class Torneo {
     }
 
     public function registrarDuelo($personaje1, $personaje2, $arena) {
-        $fechaActual = date("Y-m-d H:i:s");
+        // Registrar un duelo en la base de datos y agregarlo al array de duelos del torneo
+        $fechaActual = date("Y-m-d H:i:s"); //usamos la función date para obtener la fecha y hora actual en el formato adecuado
         $duelo = new Duelo(
             $personaje1,
             $personaje2,
@@ -105,9 +106,9 @@ class Torneo {
             'pendiente'
         );
         $duelo->guardar($this->getDatabase());
-        $coleccionActual = $this->getDuelos();
-        $coleccionActual[] = $duelo;
-        $this->setDuelos($coleccionActual);
+        $arrayDuelo = $this->getDuelos();
+        $arrayDuelo[] = $duelo;
+        $this->setDuelos($arrayDuelo);
         return $duelo;
     }
 
@@ -118,6 +119,7 @@ class Torneo {
     public function listarPersonajes($estado = null) {
         $todos = Personaje::listar($this->getDatabase());
         if ($estado !== null) {
+            //usamos array_filter para filtrar los personajes por estado, y array_values para reindexar el array resultante
             $filtrados = array_values(array_filter($todos, fn($p) => $p->getEstado() === $estado));
             return $filtrados;
         }

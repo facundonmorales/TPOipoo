@@ -207,7 +207,7 @@ abstract class Personaje {
     public static function listar($database) {
         $todosLosDatos = $database->select("personajes", "*");
         $listaPersonajes = [];
-
+        //Recorremos los datos obtenidos de la base de datos y creamos instancias de los personajes según su tipo
         foreach ($todosLosDatos as $datos) {
             $tipo = $datos["tipoPersonaje"];
             $personaje = null;
@@ -280,7 +280,7 @@ abstract class Personaje {
     }
 
     public function recibirCastigo($danio){
-        $this->recibirDanio($danio); // recibirDanio ya actualiza el estado correctamente
+        $this->recibirDanio($danio);
         $this->setDuelosPerdidos($this->getDuelosPerdidos() + 1);
         $this->setEnergia($this->getEnergia() - 5);
     }

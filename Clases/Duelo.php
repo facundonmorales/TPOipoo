@@ -33,7 +33,7 @@ class Duelo
         $this->estado = $estado;
         $this->ganador = $ganador;
 
-        // 💡 Los asignamos directamente acá
+        
         $this->danioAplicado = $danioAplicado;
         $this->pwPersonaje1 = $pwPersonaje1;
         $this->pwPersonaje2 = $pwPersonaje2;
@@ -123,7 +123,8 @@ class Duelo
     public function setDanioAplicado($danioAplicado){
         $this->danioAplicado = $danioAplicado;
     }
-    //consultas SQL
+
+    //Persistencia
 
     public function guardar($database) {
         $datos = [
@@ -205,7 +206,7 @@ class Duelo
         return $borradoExitoso;
     }
 
-
+    //Metodos
     public function puedeRealizarse()
     {
         $idPj1 = $this->getPersonaje1()->getId();
@@ -226,7 +227,7 @@ class Duelo
             $personaje2 = $this->getPersonaje2();
             $this->setPwPersonaje1($personaje1->calcularPoderTotal() + $this->getArena()->calcularModificadorArena($personaje1));
             $this->setPwPersonaje2($personaje2->calcularPoderTotal() + $this->getArena()->calcularModificadorArena($personaje2));
-
+            //Si el poder de un personaje es mayor al del otro, se determina el ganador y se aplican las recompensas y castigos que le corresponden a cada uno. Si son iguales, se termina en empate y no se aplican recompensas ni castigos
             if ($this->getPwPersonaje1() > $this->getPwPersonaje2()) {
                 $this->setGanador($personaje1);
                 $this->setDanioAplicado($this->getPwPersonaje1() - $this->getPwPersonaje2());
@@ -240,7 +241,6 @@ class Duelo
                 $this->getPersonaje1()->recibirCastigo($this->getDanioAplicado());
 
             } else {
-                // Empate: nadie gana ni pierde, daño 0
                 $this->setGanador(null);
                 $this->setDanioAplicado(0);
             }

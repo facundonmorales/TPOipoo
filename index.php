@@ -1,10 +1,10 @@
 <?php
 require_once 'BDD/config.php';
-require_once 'Clases/Personaje.php';   // primero la clase padre
+require_once 'Clases/Personaje.php';
 require_once 'Clases/Arma.php';
 require_once 'Clases/Arena.php';
 require_once 'Clases/Duelo.php';
-require_once 'Clases/Torneo.php';     // Torneo al final, sin includes adentro
+require_once 'Clases/Torneo.php';
 
 $torneo = new Torneo($database);
 
@@ -12,7 +12,7 @@ function leer($mensaje = "") {
     if ($mensaje) echo $mensaje;
     return trim(fgets(STDIN));
 }
-
+// Función para limpiar la pantalla en la consola, usamos el metodo str_repeat para crear una linea de separacion
 function limpiarPantalla() {
     echo "\n" . str_repeat("=", 50) . "\n";
 }
@@ -23,7 +23,7 @@ function pausar() {
 }
 
 // ─────────────────────────────────────────
-//  MENÚ PRINCIPAL
+//  MENU PRINCIPAL
 // ─────────────────────────────────────────
 function menuPrincipal() {
     limpiarPantalla();
@@ -55,12 +55,12 @@ function registrarPersonaje($torneo) {
     echo "  Tipo: 1) Guerrero  2) Mago  3) Arquero\n";
     $tipoOp = leer("  Opcion: ");
 
-    $nivel    = (int) leer("  Nivel: ");
+    $nivel    = (int) leer("  Nivel: "); //Usamos (int) para convertir la entrada a un número entero
     $vida     = (int) leer("  Puntos de vida: ");
     $energia  = (int) leer("  Energia: ");
 
     $personaje = null;
-
+    // Dependiendo del tipo de personaje, solicitamos atributos específicos y creamos la instancia correspondiente
     if ($tipoOp == "1") {
         $fuerza   = (int) leer("  Fuerza: ");
         $armadura = (int) leer("  Armadura: ");
@@ -378,7 +378,7 @@ function menuRanking($torneo) {
                  GROUP BY a.id, a.nombre
                  ORDER BY totalDuelos DESC
                  LIMIT 1"
-            )->fetch(\PDO::FETCH_ASSOC);
+            )->fetch(\PDO::FETCH_ASSOC); //fetchAll para obtener todos los resultados como un array asociativo, PDO::FETCH_ASSOC para que nos devuelva un array asociativo en lugar de un array indexado
 
             if ($resultado) {
                 echo "\n  Arena con mas duelos: {$resultado['nombre']} ({$resultado['totalDuelos']} duelos)\n";
@@ -416,8 +416,9 @@ function historialPersonaje($torneo) {
     echo str_repeat("-", 40) . "\n";
 
     // Consulta JOIN para traer todos los duelos del personaje
-    $db = $torneo->getDatabase();
-    $duelos = $db->query(
+    $database = $torneo->getDatabase();
+    // Usamos una consulta SQL con JOIN para obtener los duelos del personaje, incluyendo nombres de los personajes y el ganador
+    $duelos = $database->query(
         "SELECT d.id, d.fecha, d.estado, d.poderPersonaje1, d.poderPersonaje2, d.danioAplicado,
                 p1.nombre AS nombre1, p2.nombre AS nombre2,
                 g.nombre AS ganador, a.nombre AS arena
@@ -429,7 +430,7 @@ function historialPersonaje($torneo) {
          WHERE d.idPersonaje1 = :id OR d.idPersonaje2 = :id
          ORDER BY d.fecha DESC",
         [":id" => $id]
-    )->fetchAll(\PDO::FETCH_ASSOC);
+    )->fetchAll(\PDO::FETCH_ASSOC); 
 
     if (empty($duelos)) {
         echo "  Este personaje no tiene duelos registrados.\n";
@@ -507,12 +508,12 @@ function menuConsultas($torneo) {
 
         case "6":
             // JOIN personajes con armas
-            $db = $torneo->getDatabase();
-            $filas = $db->query(
+            $database = $torneo->getDatabase();
+            $filas = $database->query(
                 "SELECT p.nombre AS personaje, a.nombre AS arma
                  FROM personajes p
                  LEFT JOIN armas a ON p.idArmaEquipada = a.id
-                 ORDER BY p.nombre"
+                 ORDER BY p.nombre" //JOIN para obtener el nombre del arma equipada por cada personaje, LEFT JOIN para incluir personajes sin arma equipada, y ordenamos por nombre de personaje
             )->fetchAll(\PDO::FETCH_ASSOC);
             echo "\n  === ARMA EQUIPADA POR PERSONAJE ===\n";
             foreach ($filas as $f) {
@@ -563,8 +564,8 @@ do {
         case "8": menuRanking($torneo);               break;
         case "9": historialPersonaje($torneo);        break;
         case "10": menuConsultas($torneo);            break;
-        case "0": echo "\n  Hasta la proxima, que gane el mejor!\n\n"; break;
+        case "0": echo "\n  Torneo Finalizado\n\n"; break;
         default:  echo "\n  Opcion invalida.\n"; pausar();
     }
 
-} while ($opcion !== "0");
+} while ($opcion !== "0");//usamos un bucle do-while para que el menu se muestre al menos una vez y se repita hasta que el usuario elija salir (la opcion 0)

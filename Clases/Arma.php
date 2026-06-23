@@ -58,10 +58,10 @@ class Arma {
         $this->estado = $estado;
     }
 
-    //Consultas SQL
+    //Persistencia
 
     public function guardar($database) {
-        // 1. Mapeamos las propiedades del objeto a las columnas de la tabla 'armas'
+        // Los datos que vamos a guardar en la base de datos obtenidos a través de los getters de la clase
         $datos = [
             "nombre" => $this->getNombre(),
             "tipo" => $this->getTipo(),
@@ -108,7 +108,7 @@ class Arma {
 
         return $objetoArma;
     }
-
+    
     public static function listar($database) {
         $todasLasArmas = $database->select("armas", "*");
         $listaArmas = []; 

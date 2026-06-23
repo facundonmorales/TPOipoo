@@ -51,7 +51,7 @@ class Arena {
         $this->clima = $clima;
     }
 
-    //Consultas SQL
+    //Persistencia
     public function guardar($database) {
         $datos = [
             "nombre" => $this->getNombre(),
