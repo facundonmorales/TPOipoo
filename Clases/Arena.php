@@ -52,7 +52,8 @@ class Arena {
     }
 
     //Persistencia
-    public function guardar($database) {
+        public function guardar($database) {
+        $exito = false;
         $datos = [
             "nombre" => $this->getNombre(),
             "dificultad" => $this->getDificultad(),
@@ -62,11 +63,16 @@ class Arena {
 
         if ($this->getId()) {
             $database->update("arenas", $datos, ["id" => $this->getId()]);
+            $exito = true;
         } else {
             $database->insert("arenas", $datos);
             $this->setId($database->id());
+            $exito = true;
         }
+        return $exito;
     }
+
+    
     public static function buscarPorId($database, $id) {
         $datos = $database->get("arenas", "*", ["id" => $id]);
         $objetoArena = null; 

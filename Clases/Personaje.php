@@ -93,6 +93,7 @@ abstract class Personaje {
     //Consultas SQL
     //Inserta un personaje o modifica el actual si es que ya existe
     public function guardar($database) {
+        $exito = false;
         $datos = [
             "nombre" => $this->getNombre(),
             "tipoPersonaje" => $this->getTipoPersonaje(),
@@ -117,10 +118,13 @@ abstract class Personaje {
 
         if ($this->getId()) {
             $database->update("personajes", $datos, ["id" => $this->getId()]);
+            $exito = true;
         } else {
             $database->insert("personajes", $datos);
             $this->setId($database->id());
+            $exito = true;
         }
+        return $exito;
     }
     
 

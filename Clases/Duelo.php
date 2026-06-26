@@ -127,6 +127,7 @@ class Duelo
     //Persistencia
 
     public function guardar($database) {
+        $exito = false;
         $datos = [
             "idPersonaje1"    => $this->getPersonaje1()->getId(),
             "idPersonaje2"    => $this->getPersonaje2()->getId(),
@@ -141,10 +142,13 @@ class Duelo
 
         if ($this->getId()) {
             $database->update("duelos", $datos, ["id" => $this->getId()]);
+            $exito = true;
         } else {
             $database->insert("duelos", $datos);
             $this->setId($database->id());
+            $exito = true;
         }
+        return $exito;
     }
 
     public static function buscarPorId($database, $id) {

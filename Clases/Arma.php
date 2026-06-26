@@ -62,6 +62,7 @@ class Arma {
 
     public function guardar($database) {
         // Los datos que vamos a guardar en la base de datos obtenidos a través de los getters de la clase
+        $exito = false;
         $datos = [
             "nombre" => $this->getNombre(),
             "tipo" => $this->getTipo(),
@@ -71,11 +72,15 @@ class Arma {
         ];
         if ($this->getId()) {
             $database->update("armas", $datos, ["id" => $this->getId()]);
+            $exito = true;
         } else {
             $database->insert("armas", $datos);
             $this->setId($database->id());
+            $exito = true;
         }
+        return $exito;
     }
+
 
     public function borrar($database) {
 
