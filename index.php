@@ -557,7 +557,7 @@ function listarDuelos($torneo) {
     $op = leer("  Opcion: ");
 
     $estados = ["2" => "pendiente", "3" => "realizado"];
-    $where   = isset($estados[$op]) ? ["duelos.estado" => $estados[$op]] : []; // Si no hay filtro, $where queda vacío para traer todos los duelos
+    $where   = isset($estados[$op]) ? ["duelos.estado" => $estados[$op]] : []; //
 
     // JOIN con personajes dos veces (p1 y p2), LEFT JOIN para el ganador (puede ser null), JOIN con arenas
     $filas = $torneo->getDatabase()->select(
@@ -576,7 +576,7 @@ function listarDuelos($torneo) {
             "g.nombre(ganador)",
             "arenas.nombre(arena)"
         ],
-        $where
+        $where // $where puede estar vacio para traer todos los duelos, o contener un filtro de estado
     );
 
     echo "\n";
@@ -713,7 +713,7 @@ function porcentajeVictorias($torneo) {
     separador();
     echo "  PORCENTAJE DE VICTORIAS POR PERSONAJE\n\n";
 
-    foreach (Personaje::listar($torneo->getDatabase()) as $p) {
+    foreach (Personaje::listar($torneo->getDatabase()) as $p) { //
         $total      = $p->getDuelosGanados() + $p->getDuelosPerdidos();
         $porcentaje = $total > 0 ? round($p->getDuelosGanados() / $total * 100, 1) : 0;
         echo "  {$p->getNombre()}: {$porcentaje}% ({$p->getDuelosGanados()} victorias / {$total} duelos)\n";
@@ -733,8 +733,8 @@ function arenaConMasDuelos($torneo) {
          LEFT JOIN duelos d ON d.idArena = a.id AND d.estado = 'realizado'
          GROUP BY a.id, a.nombre
          ORDER BY totalDuelos DESC
-         LIMIT 1"
-    )->fetch(\PDO::FETCH_ASSOC);
+         LIMIT 1"   
+    )->fetch(\PDO::FETCH_ASSOC); //
 
     if ($resultado) {
         echo "  Arena: {$resultado['nombre']} con {$resultado['totalDuelos']} duelos realizados\n";

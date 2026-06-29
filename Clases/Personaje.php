@@ -208,7 +208,7 @@ abstract class Personaje {
         return $personaje;
     }
 
-    public static function listar($database) {
+    public static function listar($database) { 
         $todosLosDatos = $database->select("personajes", "*");
         $listaPersonajes = [];
         //Recorremos los datos obtenidos de la base de datos y creamos instancias de los personajes según su tipo

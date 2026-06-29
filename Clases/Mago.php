@@ -33,7 +33,7 @@ class Mago extends Personaje {
     public function calcularPoderEspecial(){
         $mana = $this->getMana();
         $inteligencia = $this->getInteligencia();
-        $poderEspecial = $mana + $inteligencia * 3;
+        $poderEspecial = $mana*3 + $inteligencia * 5;
         return $poderEspecial;
     }
 
