@@ -245,8 +245,18 @@ class Duelo
                 $this->getPersonaje1()->recibirCastigo($this->getDanioAplicado());
 
             } else {
-                $this->setGanador(null);
-                $this->setDanioAplicado(0);
+                if ($personaje1->getEnergia() > $personaje2->getEnergia()) {
+                $this->setGanador($personaje1);
+                $this->setDanioAplicado($this->getPwPersonaje1() - $this->getPwPersonaje2());
+                $this->getGanador()->recibirRecompensas();
+                $this->getPersonaje2()->recibirCastigo($this->getDanioAplicado());
+                
+            } elseif ($personaje2->getEnergia() > $personaje1->getEnergia()) {
+                $this->setGanador($personaje2);
+                $this->setDanioAplicado($this->getPwPersonaje2() - $this->getPwPersonaje1());
+                $this->getGanador()->recibirRecompensas();
+                $this->getPersonaje1()->recibirCastigo($this->getDanioAplicado());
+            }
             }
 
             $this->setEstado('realizado');

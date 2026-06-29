@@ -105,7 +105,26 @@ abstract class Personaje {
             "estado" => $this->getEstado(),
             "idArmaEquipada" => ($this->getArmaEquipada() !== null) ? $this->getArmaEquipada()->getId() : null 
         ];
-        if ($this instanceof Guerrero) {
+        switch ($this->getTipoPersonaje()) {
+        case 'guerrero':
+            /** @var Guerrero $this */
+            $datos["fuerza"] = $this->getFuerza();
+            $datos["armadura"] = $this->getArmadura();
+            break;
+
+        case 'mago':
+            /** @var Mago $this */
+            $datos["mana"] = $this->getMana();
+            $datos["inteligencia"] = $this->getInteligencia();
+            break;
+
+        case 'arquero':
+            /** @var Arquero $this */
+            $datos["precisionPersonaje"] = $this->getPrecision(); 
+            $datos["velocidad"] = $this->getVelocidad();
+            break;
+    }
+      /*  if ($this instanceof Guerrero) {
             $datos["fuerza"] = $this->getFuerza();
             $datos["armadura"] = $this->getArmadura();
         } elseif ($this instanceof Mago) {
@@ -114,7 +133,7 @@ abstract class Personaje {
         } elseif ($this instanceof Arquero) {
             $datos["precisionPersonaje"] = $this->getPrecision(); 
             $datos["velocidad"] = $this->getVelocidad();
-        }
+        }*/
 
         if ($this->getId()) {
             $database->update("personajes", $datos, ["id" => $this->getId()]);
@@ -152,7 +171,57 @@ abstract class Personaje {
         $tipo = $datos["tipoPersonaje"];
         $personaje = null;
 
-        if ($tipo === 'guerrero') {
+        switch ($tipo) {
+            case 'guerrero':
+                $personaje = new Guerrero(
+                $datos["nombre"],          
+                $datos["tipoPersonaje"],   
+                $datos["nivel"],          
+                $datos["puntosVida"],      
+                $datos["energia"],         
+                $datos["duelosGanados"],   
+                $datos["duelosPerdidos"],  
+                $datos["estado"],          
+                $datos["fuerza"],         
+                $datos["armadura"],       
+                $datos["id"],             
+                null                      
+            );
+                break;
+            case 'mago':
+                $personaje = new Mago(
+                $datos["nombre"],         
+                $datos["tipoPersonaje"],   
+                $datos["nivel"],           
+                $datos["puntosVida"],      
+                $datos["energia"],         
+                $datos["duelosGanados"],   
+                $datos["duelosPerdidos"],  
+                $datos["estado"],         
+                $datos["mana"],           
+                $datos["inteligencia"],    
+                $datos["id"],              
+                null                       
+            );
+                break;
+            case 'arquero':
+                $personaje = new Arquero(
+                $datos["nombre"],          
+                $datos["tipoPersonaje"],   
+                $datos["nivel"],           
+                $datos["puntosVida"],      
+                $datos["energia"],         
+                $datos["duelosGanados"],   
+                $datos["duelosPerdidos"],  
+                $datos["estado"],          
+                $datos["precisionPersonaje"], 
+                $datos["velocidad"],       
+                $datos["id"],              
+                null                       
+            );
+                break;
+        }
+       /* if ($tipo === 'guerrero') {
             $personaje = new Guerrero(
                 $datos["nombre"],          
                 $datos["tipoPersonaje"],   
@@ -197,7 +266,7 @@ abstract class Personaje {
                 $datos["id"],              
                 null                       
             );
-        }
+        }*/
         if ($datos["idArmaEquipada"] !== null) {
             $objetoArma = Arma::buscarPorId($database, $datos["idArmaEquipada"]);
             if ($personaje !== null) {
@@ -215,7 +284,30 @@ abstract class Personaje {
         foreach ($todosLosDatos as $datos) {
             $tipo = $datos["tipoPersonaje"];
             $personaje = null;
-            if ($tipo === 'guerrero') {
+            switch ($tipo) {
+                case 'guerrero':
+                    $personaje = new Guerrero(
+                    $datos["nombre"], $datos["tipoPersonaje"], $datos["nivel"], $datos["puntosVida"], $datos["energia"], 
+                    $datos["duelosGanados"], $datos["duelosPerdidos"], $datos["estado"], 
+                    $datos["fuerza"], $datos["armadura"], $datos["id"], null
+                );
+                    break;
+                case 'mago':
+                    $personaje = new Mago(
+                    $datos["nombre"], $datos["tipoPersonaje"], $datos["nivel"], $datos["puntosVida"], $datos["energia"], 
+                    $datos["duelosGanados"], $datos["duelosPerdidos"], $datos["estado"], 
+                    $datos["mana"], $datos["inteligencia"], $datos["id"], null
+                );
+                    break;
+                case 'arquero':
+                    $personaje = new Arquero(
+                    $datos["nombre"], $datos["tipoPersonaje"], $datos["nivel"], $datos["puntosVida"], $datos["energia"], 
+                    $datos["duelosGanados"], $datos["duelosPerdidos"], $datos["estado"], 
+                    $datos["precisionPersonaje"], $datos["velocidad"], $datos["id"], null
+                );
+                    break;
+            }
+          /*  if ($tipo === 'guerrero') {
                 $personaje = new Guerrero(
                     $datos["nombre"], $datos["tipoPersonaje"], $datos["nivel"], $datos["puntosVida"], $datos["energia"], 
                     $datos["duelosGanados"], $datos["duelosPerdidos"], $datos["estado"], 
@@ -233,7 +325,7 @@ abstract class Personaje {
                     $datos["duelosGanados"], $datos["duelosPerdidos"], $datos["estado"], 
                     $datos["precisionPersonaje"], $datos["velocidad"], $datos["id"], null
                 );
-            }
+            }*/
             if ($personaje !== null && $datos["idArmaEquipada"] !== null) {
                 $objetoArma = Arma::buscarPorId($database, $datos["idArmaEquipada"]);
                 $personaje->setArmaEquipada($objetoArma);
