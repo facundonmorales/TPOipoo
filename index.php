@@ -44,6 +44,9 @@ function menuPrincipal() {
     echo "  15.  Arena con mas duelos\n";
     echo "  16.  Menu modificar\n";
     echo "  17.  Menu eliminar\n";
+    echo "  18.  Buscar Personaje por ID\n";
+    echo "  19.  Buscar Arma por ID\n";
+    echo "  20.  Buscar Arena por ID\n";
     echo "   0.  Salir\n";
     separador();
     return leer("  Opcion: ");
@@ -193,8 +196,8 @@ function registrarArma($torneo) {
     $tipo        = leer("  Tipo (espada/arco/baculo/hacha/daga): ");
     $danioBase   = (int) leer("  Danio base: ");
     $nivelMinimo = (int) leer("  Nivel minimo requerido: ");
-
-    $arma = new Arma($nombre, $tipo, $danioBase, $nivelMinimo, 'disponible');
+    $estado = leer("  Estado: disponible / rota:  ");
+    $arma = new Arma($nombre, $tipo, $danioBase, $nivelMinimo, $estado);
     $torneo->agregarArma($arma);
     echo "  Arma '{$nombre}' registrada (ID: {$arma->getId()})\n";
     pausar();
@@ -226,6 +229,9 @@ function modificarArma($torneo) {
 
     $nuevoNivelMinimo = leer("  Nuevo nivel minimo (actual: {$arma->getNivelMinimo()}): ");
     if ($nuevoNivelMinimo !== "") $arma->setNivelMinimo((int)$nuevoNivelMinimo);
+
+    $nuevoEstado = leer("  Nuevo Estado (actual: {$arma->getEstado()}): ");
+    if ($nuevoEstado) $arma->setEstado($nuevoEstado);
 
     // Guardar cambios
     if ($arma->guardar($torneo->getDatabase())) {
@@ -744,6 +750,80 @@ function arenaConMasDuelos($torneo) {
     pausar();
 }
 
+//Buscar personaje por ID
+
+function buscarPersonajePorId($torneo){
+    separador();
+    echo "   BUSCAR PERSONAJE POR ID\n\n";
+
+    $id = (int) leer("   Ingrese el ID del personaje: ");
+    $pj = Personaje::buscarPorId($torneo->getDatabase(), $id);
+    
+    if (!$pj) {
+        echo "   Personaje no encontrado.\n";
+        pausar();
+    } else{
+        echo "\n   [ Detalle del Personaje ]\n";
+        echo "   ID:          {$pj->getId()}\n";
+        echo "   Nombre:      {$pj->getNombre()}\n";
+        echo "   Tipo:        {$pj->getTipoPersonaje()}\n";
+        echo "   Nivel:       {$pj->getNivel()}\n";
+        echo "   Vida:        {$pj->getPuntosVida()}\n";
+        echo "   Energía:     {$pj->getEnergia()}\n";
+        echo "   Estado:      {$pj->getEstado()}\n";
+        $arma = $pj->getArmaEquipada() ? $pj->getArmaEquipada()->getNombre() : "Ninguna";
+        echo "   Arma:        {$arma}\n";
+        echo "   Historial:   {$pj->getDuelosGanados()} Victorias / {$pj->getDuelosPerdidos()} Derrotas\n";
+        pausar();
+    }
+}
+
+//Buscar arma por ID
+
+function buscarArmaPorId($torneo) {
+    separador();
+    echo "   BUSCAR ARMA POR ID\n\n";
+
+    $id = (int) leer("   Ingrese el ID del arma: ");
+    $arma = Arma::buscarPorId($torneo->getDatabase(), $id);
+    
+    if (!$arma) {
+        echo "   Arma no encontrada.\n";
+        pausar();
+    } else {
+        echo "\n   [ Detalle del Arma ]\n";
+        echo "   ID:          {$arma->getId()}\n";
+        echo "   Nombre:      {$arma->getNombre()}\n";
+        echo "   Tipo:        {$arma->getTipo()}\n";
+        echo "   Daño Base:   {$arma->getDanioBase()}\n";
+        echo "   Nivel Mín:   {$arma->getNivelMinimo()}\n";
+        echo "   Estado:      {$arma->getEstado()}\n";
+        pausar();
+    }
+}
+
+//Buscar arena por ID
+
+function buscarArenaPorId($torneo) {
+    separador();
+    echo "   BUSCAR ARENA POR ID\n\n";
+
+    $id = (int) leer("   Ingrese el ID de la arena: ");
+    $arena = Arena::buscarPorId($torneo->getDatabase(), $id);
+    
+    if (!$arena) {
+        echo "   Arena no encontrada.\n";
+        pausar();
+    } else {
+        echo "\n   [ Detalle de la Arena ]\n";
+        echo "   ID:          {$arena->getId()}\n";
+        echo "   Nombre:      {$arena->getNombre()}\n";
+        echo "   Dificultad:  {$arena->getDificultad()} (1-5)\n";
+        echo "   Capacidad:   {$arena->getCapacidadPublico()} espectadores\n";
+        echo "   Clima:       {$arena->getClima()}\n";
+        pausar();
+    }
+}
 
 do {
     $opcion = menuPrincipal();
@@ -766,8 +846,12 @@ do {
         case "15": arenaConMasDuelos($torneo);        break;
         case "16": menuModificar($torneo);            break;
         case "17": menuBorrar($torneo);             break;
+        case "18": buscarPersonajePorId($torneo); break;
+        case "19": buscarArmaPorId($torneo); break;
+        case "20": buscarArenaPorId($torneo); break;
         case "0":  echo "\n  Torneo finalizado.\n\n";       break;
         default:   echo "  Opcion invalida.\n"; pausar();
     }
 
+} while ($opcion !== "0");
 } while ($opcion !== "0");
