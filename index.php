@@ -47,10 +47,12 @@ function menuPrincipal() {
     echo "  18.  Buscar Personaje por ID\n";
     echo "  19.  Buscar Arma por ID\n";
     echo "  20.  Buscar Arena por ID\n";
+    echo "  21.  Buscar Duelo por ID\n";
     echo "   0.  Salir\n";
     separador();
     return leer("  Opcion: ");
 }
+
 function menuModificar($torneo) {
     echo "\n\n  *** MODIFICAR ***\n\n";
     echo "   1.  Modificar personaje\n";
@@ -535,7 +537,6 @@ function listarPersonajes($torneo) {
 }
 
 //Listar armas disponibles
-
 function listarArmasDisponibles($torneo) {
     separador();
     echo "  ARMAS DISPONIBLES\n\n";
@@ -824,6 +825,31 @@ function buscarArenaPorId($torneo) {
         pausar();
     }
 }
+function buscarDueloPorId($torneo) {
+    separador();
+    echo "   BUSCAR DUELO POR ID\n\n";
+
+    $id = (int) leer("   Ingrese el ID del duelo: ");
+    $duelo = Duelo::buscarPorId($torneo->getDatabase(), $id);
+    
+    if (!$duelo) {
+        echo "   Duelo no encontrado.\n";
+        pausar();
+    } else {
+        echo "\n   [ Detalle del Duelo ]\n";
+        echo "   ID:          {$duelo->getId()}\n";
+        echo "   Personaje 1: {$duelo->getPersonaje1()->getNombre()}\n";
+        echo "   Personaje 2: {$duelo->getPersonaje2()->getNombre()}\n";
+        echo "   Arena:       {$duelo->getArena()->getNombre()}\n";
+        echo "   Estado:      {$duelo->getEstado()}\n";
+        if ($duelo->getEstado() === 'realizado') {
+            $ganador = $duelo->getGanador() ? $duelo->getGanador()->getNombre() : "Empate";
+            echo "   Ganador:     {$ganador}\n";
+            echo "   Daño Aplicado: {$duelo->getDanioAplicado()}\n";
+        }
+        pausar();
+    }
+}
 
 do {
     $opcion = menuPrincipal();
@@ -849,9 +875,9 @@ do {
         case "18": buscarPersonajePorId($torneo); break;
         case "19": buscarArmaPorId($torneo); break;
         case "20": buscarArenaPorId($torneo); break;
+        case "21": buscarDueloPorId($torneo); break;
         case "0":  echo "\n  Torneo finalizado.\n\n";       break;
         default:   echo "  Opcion invalida.\n"; pausar();
     }
 
-} while ($opcion !== "0");
 } while ($opcion !== "0");

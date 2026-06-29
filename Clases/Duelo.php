@@ -244,8 +244,7 @@ class Duelo
                 $this->getGanador()->recibirRecompensas();
                 $this->getPersonaje1()->recibirCastigo($this->getDanioAplicado());
 
-            } else {
-                if ($personaje1->getEnergia() > $personaje2->getEnergia()) {
+            } elseif($personaje1->getEnergia() > $personaje2->getEnergia()) {//Si empatan por poder, se desempata por energia
                 $this->setGanador($personaje1);
                 $this->setDanioAplicado($this->getPwPersonaje1() - $this->getPwPersonaje2());
                 $this->getGanador()->recibirRecompensas();
@@ -256,20 +255,24 @@ class Duelo
                 $this->setDanioAplicado($this->getPwPersonaje2() - $this->getPwPersonaje1());
                 $this->getGanador()->recibirRecompensas();
                 $this->getPersonaje1()->recibirCastigo($this->getDanioAplicado());
-            }
+            }else{//Si empatan por poder y energia, se considera empate y no se aplican recompensas ni castigos
+                $this->setGanador(null);
+                $this->setDanioAplicado(0);
             }
 
-            $this->setEstado('realizado');
-            $seRealizo = true;
-            $personaje1->guardar($database);
-            $personaje2->guardar($database);
-
-        } else {
+        }else{
             $this->setEstado('cancelado');
             $this->setPwPersonaje1(null);
             $this->setPwPersonaje2(null);
             $this->setDanioAplicado(null);
         }
+
+        $this->setEstado('realizado');
+        $seRealizo = true;
+        $personaje1->guardar($database);
+        $personaje2->guardar($database);
+
+        
         $this->guardar($database);
 
         return $seRealizo;
